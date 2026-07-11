@@ -1,0 +1,32 @@
+{
+  "name": "bookstore-manager-cli",
+  "version": "0.0.1",
+  "description": "Projeto Avaliativo SCTEC- Módulo 1",
+  "homepage": "https://github.com/ronateds/BookStore-Manager-CLI#readme",
+  "bugs": {
+    "url": "https://github.com/ronateds/BookStore-Manager-CLI/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ronateds/BookStore-Manager-CLI.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "dev": "npx ts-node src/main.ts",
+    "start": "node dist/main.js",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "pg": "^8.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "@types/pg": "^8.20.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  }
+}
