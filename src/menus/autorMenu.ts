@@ -1,8 +1,10 @@
 import { select, Separator } from "@inquirer/i18n/pt";
 import { header } from "../utils/formatters";
 import { menuPrincipal } from "./mainMenu";
+import { AutorController } from "../controllers/AutorController";
 
 export async function menuAutores(): Promise<void> {
+    const controller = new AutorController();
     header('Menu Autores')
 
     const opcao = await select({
@@ -39,6 +41,9 @@ export async function menuAutores(): Promise<void> {
     switch (opcao) {
         case '1':
             console.log('cadastrar');
+            break;
+        case '2':
+            await controller.listar();
             break;
         case '0':
             menuPrincipal();
