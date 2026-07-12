@@ -3,8 +3,9 @@ import { menuAutores } from './autorMenu';
 import { header } from '../utils/formatters';
 
 export async function menuPrincipal(): Promise<void> {
+    let msg;
     while (true) {
-        header('Menu Principal');
+        header('Menu Principal', msg);
         const opcao = await select({
             message: 'Escolha uma opção',
             choices: [
@@ -35,12 +36,14 @@ export async function menuPrincipal(): Promise<void> {
         switch (opcao) {
             case '1':
                 await menuAutores();
-                return;
+                msg = null;
+                continue;
             case '0':
-                console.log('\nEncerrando a aplicação. Até logo!\n');
+                msg = 'Encerrando a aplicação. Até logo!';
                 return;
             default:
-                console.log('\nOpção inválida. Tente novamente.\n');
+                msg = 'Opção inválida. Tente novamente.';
+                continue;
         }
     }
 }
