@@ -45,4 +45,27 @@ export class AutorController {
             tratarErro(error);
         }
     }
+
+    async atualizar(): Promise<void> {
+        try {
+            const id = Number(await input({ message: 'Informe o id do autor: '}));
+            const nome = await input({ message: 'Novo nome: '});
+            const nacionalidade = await input({ message: 'Nova nacionalidade: '});
+
+            const autor = await this.autorService.atualizar(id, { nome, nacionalidade });
+            console.log(`\nAutor atualizado com sucesso! [${ autor.id }] ${ autor.nome }\n`);
+        } catch (error) {
+            tratarErro(error);
+        }
+    }
+
+    async remover(): Promise<void> {
+        try {
+            const id = Number(await input({ message: 'Informe o id do autor: ' }));
+            await this.autorService.remover(id);
+            console.log('\nAutor removido com sucesso!\n');
+        } catch (error) {
+            tratarErro(error);
+        }
+    }
 }

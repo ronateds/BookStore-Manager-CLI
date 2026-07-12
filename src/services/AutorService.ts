@@ -27,4 +27,25 @@ export class AutorService {
         }
         return autor;
     }
+
+    async atualizar(id: number, dados: IAutor): Promise<Autor> {
+        await this.buscarPorId(id);
+        if (!isTextoValido(dados.nome) || !isTextoValido(dados.nacionalidade)) {
+            throw new AppError('Dados inválidos para atualização do autor.');
+        }
+        const atualizado = await this.autorRepository.atualizar(id, dados);
+        if (!atualizado) {
+            throw new AppError('Não foi possível atualizar o autor.');
+        }
+        return atualizado;
+    }
+
+    async remover(id: number): Promise<void> {
+        await this.buscarPorId(id);
+        const possuiLivros = await this.autorRepository.possuiLivrosVinculados(id);
+        if (possuiLivros) {
+            throw new AppError('Não é possível remover o autor: existem livros vinculados a ele.');
+        }
+        await this.autorRepository.remover(id);
+    }
 }

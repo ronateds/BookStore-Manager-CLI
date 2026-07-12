@@ -59,6 +59,14 @@ export async function menuAutores(): Promise<void> {
                 header('Buscar autor(a) por id');
                 await controller.buscarPorId();
                 break;
+            case '4':
+                header('Atualizar autor(a)');
+                await controller.atualizar();
+                break;
+            case '5':
+                header('Remover autor(a)');
+                await controller.remover();
+                break;
             case '0':
                 return;
             case '-1':
