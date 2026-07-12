@@ -1,6 +1,7 @@
 import { select, Separator } from '@inquirer/i18n/pt';
 import { menuAutores } from './autorMenu';
 import { header } from '../utils/formatters';
+import { encerrrar } from '../utils/encerrar';
 
 export async function menuPrincipal(): Promise<void> {
     let msg;
@@ -28,7 +29,7 @@ export async function menuPrincipal(): Promise<void> {
                 },
                 {
                     name: 'X  Encerrar aplicação',
-                    value: '0',
+                    value: '-1',
                 },
             ],
         });
@@ -38,9 +39,9 @@ export async function menuPrincipal(): Promise<void> {
                 await menuAutores();
                 msg = null;
                 continue;
-            case '0':
-                msg = 'Encerrando a aplicação. Até logo!';
-                return;
+            case '-1':
+                await encerrrar();
+                break;
             default:
                 msg = 'Opção inválida. Tente novamente.';
                 continue;
