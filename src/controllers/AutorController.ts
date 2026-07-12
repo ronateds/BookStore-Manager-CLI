@@ -1,11 +1,11 @@
+import { input } from "@inquirer/i18n";
 import { AutorService } from "../services/AutorService";
-import { header } from "../utils/formatters";
+import { tratarErro } from "../utils/tratarErro";
 
 export class AutorController {
     private autorService = new AutorService();
 
     async listar(): Promise<void> {
-        header('Lista de Autores');
         try {
             const autores = await this.autorService.listar();
             if (autores.length === 0) {
@@ -15,9 +15,57 @@ export class AutorController {
             autores.forEach((a) => {
                 console.log(`[${ a.id }] ${ a.nome } - ${ a.nacionalidade }`);
             });
+            console.log(); // pra deixar uma linha vazia
             return;
         } catch (error) {
-            console.error(error);
+            tratarErro(error);
+        }
+    }
+
+    async cadastrar(): Promise<void> {
+        try {
+            const nome = await input({ message: "Nome do Autor(a): " });
+            const nacionalidade = await input({ message: "Nacionalidade: " })
+
+            const autor = await this.autorService.cadastrar({ nome, nacionalidade });
+            if(autor) {
+                console.log(`\nAutor(a) ${ autor.nome } cadastrado com sucesso! (id: ${ autor.id }\n)`);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async buscarPorId(): Promise<void> {
+        try {
+            const id = Number(await input({ message: "Informe o id do autor(a): " }));
+            const autor = await this.autorService.buscarPorId(id);
+            console.log(`\n[${ autor.id }] ${ autor.nome } - ${ autor.nacionalidade }\n`);
+        } catch (error) {
+            tratarErro(error);
+        }
+    }
+
+    async atualizar(): Promise<void> {
+        try {
+            const id = Number(await input({ message: 'Informe o id do autor: '}));
+            const nome = await input({ message: 'Novo nome: '});
+            const nacionalidade = await input({ message: 'Nova nacionalidade: '});
+
+            const autor = await this.autorService.atualizar(id, { nome, nacionalidade });
+            console.log(`\nAutor atualizado com sucesso! [${ autor.id }] ${ autor.nome }\n`);
+        } catch (error) {
+            tratarErro(error);
+        }
+    }
+
+    async remover(): Promise<void> {
+        try {
+            const id = Number(await input({ message: 'Informe o id do autor: ' }));
+            await this.autorService.remover(id);
+            console.log('\nAutor removido com sucesso!\n');
+        } catch (error) {
+            tratarErro(error);
         }
     }
 }
