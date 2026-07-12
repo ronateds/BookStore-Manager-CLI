@@ -6,4 +6,12 @@ export class AutorRepository {
         const resultado = await pool.query<IAutor>(`SELECT * FROM public.autores`);
         return resultado.rows;
     }
+
+    async cadastrar(autor: IAutor): Promise<Autor | undefined> {
+        const resultado = await pool.query<IAutor>(
+            `INSERT INTO autores (nome, nacionalidade) VALUES ($1, $2) RETURNING *`,
+            [autor.nome, autor.nacionalidade],
+        );
+        return resultado.rows[0];
+    }
 }

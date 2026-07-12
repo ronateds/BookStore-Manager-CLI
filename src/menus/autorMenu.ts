@@ -48,9 +48,11 @@ export async function menuAutores(): Promise<void> {
 
         switch (opcao) {
             case '1':
-                msg = 'cadastrar'
-                break;
+                header('Cadastrar Autores');
+                await controller.cadastrar();
+                break;;
             case '2':
+                header('Lista de Autores');
                 await controller.listar();
                 break;
             case '0':
