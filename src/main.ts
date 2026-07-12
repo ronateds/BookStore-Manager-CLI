@@ -4,11 +4,15 @@ import { menuPrincipal } from "./menus/mainMenu";
 async function main(): Promise<void> {
     console.log('Iniciando BookStore Manager CLI...');
 
-    // const result = await pool.query('SELECT NOW()');
-    // console.log(result.rows[0]);
-    await menuPrincipal();
-
-    await pool.end()
+    try {
+        await menuPrincipal();
+    } catch (error) {
+        console.error('\n', error);
+    } finally {
+        console.log('encerrando');
+        await pool.end();
+        process.exit()
+    }
 }
 
 main();
