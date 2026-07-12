@@ -19,4 +19,12 @@ export class AutorService {
         }
         return this.autorRepository.cadastrar(dados);
     }
+
+    async buscarPorId(id: number): Promise<Autor> {
+        const autor = await this.autorRepository.buscarPorId(id);
+        if (!autor) {
+            throw new AppError(`Autor com id ${ id } não encontrado.`);
+        }
+        return autor;
+    }
 }

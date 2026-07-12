@@ -1,5 +1,6 @@
 import { input } from "@inquirer/i18n";
 import { AutorService } from "../services/AutorService";
+import { tratarErro } from "../utils/tratarErro";
 
 export class AutorController {
     private autorService = new AutorService();
@@ -17,7 +18,7 @@ export class AutorController {
             console.log(); // pra deixar uma linha vazia
             return;
         } catch (error) {
-            console.error(error);
+            tratarErro(error);
         }
     }
 
@@ -32,6 +33,16 @@ export class AutorController {
             }
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    async buscarPorId(): Promise<void> {
+        try {
+            const id = Number(await input({ message: "Informe o id do autor(a): " }));
+            const autor = await this.autorService.buscarPorId(id);
+            console.log(`\n[${ autor.id }] ${ autor.nome } - ${ autor.nacionalidade }\n`);
+        } catch (error) {
+            tratarErro(error);
         }
     }
 }

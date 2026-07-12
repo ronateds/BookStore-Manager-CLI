@@ -24,15 +24,15 @@ export async function menuAutores(): Promise<void> {
                     value: '2',
                 },
                 {
-                    name: '3  Consultar autor por id',
+                    name: '3  Buscar autor(a) por id',
                     value: '3',
                 },
                 {
-                    name: '4  Atualizar autor',
+                    name: '4  Atualizar autor(a)',
                     value: '4',
                 },
                 {
-                    name: '5  Remover autor',
+                    name: '5  Remover autor(a)',
                     value: '5',
                 },
                 {
@@ -50,10 +50,14 @@ export async function menuAutores(): Promise<void> {
             case '1':
                 header('Cadastrar Autores');
                 await controller.cadastrar();
-                break;;
+                break;
             case '2':
                 header('Lista de Autores');
                 await controller.listar();
+                break;
+            case '3':
+                header('Buscar autor(a) por id');
+                await controller.buscarPorId();
                 break;
             case '0':
                 return;
