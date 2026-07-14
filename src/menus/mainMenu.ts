@@ -2,6 +2,7 @@ import { select, Separator } from '@inquirer/i18n/pt';
 import { menuAutores } from './autorMenu';
 import { header } from '../utils/formatters';
 import { encerrrar } from '../utils/encerrar';
+import { menuLivros } from './LivroMenu';
 
 export async function menuPrincipal(): Promise<void> {
     let msg;
@@ -37,6 +38,10 @@ export async function menuPrincipal(): Promise<void> {
         switch (opcao) {
             case '1':
                 await menuAutores();
+                msg = null;
+                continue;
+            case '2':
+                await menuLivros();
                 msg = null;
                 continue;
             case '-1':
