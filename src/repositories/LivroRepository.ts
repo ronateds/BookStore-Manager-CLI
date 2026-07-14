@@ -2,7 +2,7 @@ import { pool } from '../database/connection';
 import { ILivro, ILivroComAutor, Livro } from '../models/Livro';
 
 export class LivroRepository {
-    async criar(livro: ILivro): Promise<Livro> {
+  async criar(livro: ILivro): Promise<Livro> {
     const resultado = await pool.query(
       `INSERT INTO livros (titulo, ano_publicacao, quantidade_total, quantidade_disponivel, autor_id)
        VALUES ($1, $2, $3, $4, $5) RETURNING *`,
@@ -10,15 +10,22 @@ export class LivroRepository {
     );
     return resultado.rows[0];
   }
-      
-    async listarTodos(): Promise<ILivroComAutor[]> {
-    const resultado = await pool.query<ILivroComAutor>(
-        `SELECT l.*, a.nome AS nome_autor
+
+  async listarTodos(): Promise<ILivroComAutor[]> {
+    const resultado = await pool.query(
+      `SELECT l.*, a.nome AS nome_autor
        FROM livros l
        INNER JOIN autores a ON a.id = l.autor_id
        ORDER BY l.id ASC`,
     );
     return resultado.rows;
   }
+
+  async buscarPorId(id: number): Promise<Livro | null> {
+    const resultado = await pool.query(`SELECT * FROM livros WHERE id = $1`, [id]);
+    if (resultado.rows.length === 0) return null;
+    return resultado.rows[0];
+  }
+
 }
 

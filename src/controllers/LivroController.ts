@@ -46,4 +46,17 @@ async cadastrar(): Promise<void> {
       tratarErro(error);
     }
   } 
+
+    async consultarPorId(): Promise<void> {
+    try {
+      const id = Number(await input({ message: 'Informe o id do livro: ' }));
+      const livro = await this.livroService.buscarPorId(id);
+
+      console.log(
+        `\n[${ livro.id }] ${ livro.titulo } (${ livro.anoPublicacao }) - Disponíveis: ${ livro.quantidadeDisponivel }/${ livro.quantidadeTotal }\n`);
+    } catch (error) {
+      tratarErro(error);
+    }
+  }
+
 }

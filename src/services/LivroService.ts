@@ -24,16 +24,24 @@ export class LivroService {
       throw new AppError(`Autor com id ${dados.autorId} não encontrado. Cadastre o autor antes do livro.`);
     }
 
-      const livroParaCriar: ILivro = {
+    const livroParaCriar: ILivro = {
       ...dados,
       quantidadeDisponivel: dados.quantidadeTotal,
     };
 
     return this.livroRepository.criar(livroParaCriar);
-  }
+ }
   
   async listar(): Promise<ILivroComAutor[]> {
     return this.livroRepository.listarTodos();
+ }
+
+  async buscarPorId(id: number): Promise<Livro> {
+    const livro = await this.livroRepository.buscarPorId(id);
+    if (!livro) {
+      throw new AppError(`Livro com id ${id} não encontrado.`);
+    }
+    return livro;
   }
 
 }
