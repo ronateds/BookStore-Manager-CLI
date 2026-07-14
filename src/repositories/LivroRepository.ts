@@ -39,6 +39,15 @@ export class LivroRepository {
     return resultado.rows[0];
   }
 
+  async remover(id: number): Promise<boolean> {
+    const resultado = await pool.query(`DELETE FROM livros WHERE id = $1`, [id]);
+    return (resultado.rowCount ?? 0) > 0;
+  }
 
+  async possuiEmprestimosVinculados(id: number): Promise<boolean> {
+    const resultado = await pool.query(`SELECT 1 FROM emprestimos WHERE livro_id = $1 LIMIT 1`, [id]);
+    return resultado.rows.length > 0;
+  }
+  
 }
 

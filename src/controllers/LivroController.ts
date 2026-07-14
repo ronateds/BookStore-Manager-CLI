@@ -81,6 +81,15 @@ async cadastrar(): Promise<void> {
     }
   }
 
+  async remover(): Promise<void> {
+    try {
+      const id = Number(await input({ message: 'Informe o id do livro: ' }));
+      await this.livroService.remover(id);
+      console.log('\nLivro removido com sucesso!\n');
+    } catch (error) {
+      tratarErro(error);
+    }
+  }
   
 
 }

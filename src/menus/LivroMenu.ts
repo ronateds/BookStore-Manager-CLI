@@ -63,6 +63,10 @@ export async function menuLivros(): Promise<void> {
         header('Atualizar livro');
         await controller.atualizar();
         break;
+      case '5':
+        header('Remover livro');
+        await controller.remover();
+        break;
       case '0':
         return;
       case '-1':

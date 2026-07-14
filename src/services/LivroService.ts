@@ -79,5 +79,15 @@ export class LivroService {
     }
     return atualizado;
   }
+
+  async remover(id: number): Promise<void> {
+    await this.buscarPorId(id);
+    const possuiEmprestimos = await this.livroRepository.possuiEmprestimosVinculados(id);
+    if (possuiEmprestimos) {
+      throw new AppError('Não é possível remover o livro: existem empréstimos vinculados a ele.');
+    }
+    await this.livroRepository.remover(id);
+  }
+  
 }
 
