@@ -44,5 +44,40 @@ export class LivroService {
     return livro;
   }
 
+  async atualizar(id: number, dados: ILivro): Promise<Livro> {
+    const livroExistente = await this.buscarPorId(id);
+
+    if (!isTextoValido(dados.titulo)) {
+      throw new AppError('Título do livro inválido.');
+    }
+    if (!isAnoValido(dados.anoPublicacao)) {
+      throw new AppError('Ano de publicação inválido.');
+    }
+
+    const autor = await this.autorRepository.buscarPorId(dados.autorId);
+    if (!autor) {
+      throw new AppError(`Autor com id ${dados.autorId} não encontrado.`);
+    }
+
+    
+    const quantidadeEmprestada = livroExistente.quantidadeTotal - livroExistente.quantidadeDisponivel;
+    const novaQuantidadeDisponivel = dados.quantidadeTotal - quantidadeEmprestada;
+
+    if (novaQuantidadeDisponivel < 0) {
+      throw new AppError(
+        `Não é possível reduzir a quantidade total abaixo de ${quantidadeEmprestada} (livros atualmente emprestados).`,
+      );
+    }
+
+    const atualizado = await this.livroRepository.atualizar(id, {
+      ...dados,
+      quantidadeDisponivel: novaQuantidadeDisponivel,
+    });
+
+    if (!atualizado) {
+      throw new AppError('Não foi possível atualizar o livro.');
+    }
+    return atualizado;
+  }
 }
 

@@ -1,5 +1,5 @@
 export interface ILivro {
-  id: number | undefined;
+  id?: number;
   titulo: string;
   anoPublicacao: number;
   quantidadeTotal: number;
@@ -8,7 +8,7 @@ export interface ILivro {
 }
 
 export class Livro implements ILivro {
-  id: number | undefined;
+  id?: number;
   titulo: string;
   anoPublicacao: number;
   quantidadeTotal: number;
@@ -28,7 +28,7 @@ export class Livro implements ILivro {
     this.quantidadeTotal = quantidadeTotal;
     this.quantidadeDisponivel = quantidadeDisponivel;
     this.autorId = autorId;
-    this.id = id;
+    if (id !== undefined) this.id = id;
   }
 }
 

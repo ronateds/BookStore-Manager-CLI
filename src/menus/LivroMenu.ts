@@ -55,6 +55,14 @@ export async function menuLivros(): Promise<void> {
         header('Listar livros');
         await controller.listar();
         break;
+        case '3':
+        header('Consultar livro por id');
+        await controller.consultarPorId();
+        break;
+        case '4':
+        header('Atualizar livro');
+        await controller.atualizar();
+        break;
       case '0':
         return;
       case '-1':
@@ -68,6 +76,7 @@ export async function menuLivros(): Promise<void> {
     if (msg) {
       console.log(msg, '\n');
     }
+
 
        const menuVoltar = await select({
       message: 'Escolha uma opção',

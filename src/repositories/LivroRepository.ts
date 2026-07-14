@@ -27,5 +27,18 @@ export class LivroRepository {
     return resultado.rows[0];
   }
 
+  async atualizar(id: number, livro: ILivro): Promise<Livro | null> {
+    const resultado = await pool.query(
+      `UPDATE livros
+       SET titulo = $1, ano_publicacao = $2, quantidade_total = $3,
+           quantidade_disponivel = $4, autor_id = $5
+       WHERE id = $6 RETURNING *`,
+      [livro.titulo, livro.anoPublicacao, livro.quantidadeTotal, livro.quantidadeDisponivel, livro.autorId, id],
+    );
+    if (resultado.rows.length === 0) return null;
+    return resultado.rows[0];
+  }
+
+
 }
 

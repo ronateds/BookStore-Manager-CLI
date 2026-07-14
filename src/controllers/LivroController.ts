@@ -47,7 +47,7 @@ async cadastrar(): Promise<void> {
     }
   } 
 
-    async consultarPorId(): Promise<void> {
+   async consultarPorId(): Promise<void> {
     try {
       const id = Number(await input({ message: 'Informe o id do livro: ' }));
       const livro = await this.livroService.buscarPorId(id);
@@ -58,5 +58,29 @@ async cadastrar(): Promise<void> {
       tratarErro(error);
     }
   }
+
+  async atualizar(): Promise<void> {
+    try {
+      const id = Number(await input({ message: 'Informe o id do livro: ' }));
+      const tituloLivro = await input({ message: 'Novo título: ' });
+      const anoPublicacao = Number(await input({ message: 'Novo ano de publicação: ' }));
+      const quantidadeTotal = Number(await input({ message: 'Nova quantidade total: ' }));
+      const autorId = Number(await input({ message: 'Id do autor: ' }));
+
+      const livro = await this.livroService.atualizar(id, {
+        titulo: tituloLivro,
+        anoPublicacao,
+        quantidadeTotal,
+        quantidadeDisponivel: quantidadeTotal,
+        autorId,
+      });
+      
+      console.log(`\nLivro atualizado com sucesso! [${ livro.id }] ${ livro.titulo }`);
+    } catch (error) {
+      tratarErro(error);
+    }
+  }
+
+  
 
 }
