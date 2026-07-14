@@ -47,7 +47,10 @@ export async function menuLivros(): Promise<void> {
     });
 
     switch (opcao) {
-      
+      case '1':
+        header('Cadastrar livro');
+        await controller.cadastrar();
+        break;
       case '2':
         header('Listar livros');
         await controller.listar();
