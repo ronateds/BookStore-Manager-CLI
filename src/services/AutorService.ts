@@ -11,13 +11,14 @@ export class AutorService {
     }
 
     async cadastrar(dados: Omit<IAutor, "id">): Promise<Autor | undefined> {
-        // TODO melhorar validação
-        if (!isTextoValido(dados.nome)) {
-            throw new AppError('Nome do autor inválido. Informe pelo menos 2 caracteres.');
-        }
-        if (!isTextoValido(dados.nacionalidade)) {
-            throw new AppError('Nacionalidade inválida. Informe pelo menos 2 caracteres.');
-        }
+        Object.values(dados).forEach(valor => {
+            const validacao = isTextoValido(valor);
+
+            if (!validacao.ok) {
+                throw new AppError(validacao.msg);
+            }
+        });
+
         return this.autorRepository.cadastrar(dados);
     }
 
@@ -31,9 +32,15 @@ export class AutorService {
 
     async atualizar(dados: IAutor): Promise<Autor> {
         await this.buscarPorId(dados.id);
-        if (!isTextoValido(dados.nome) || !isTextoValido(dados.nacionalidade)) {
-            throw new AppError('Dados inválidos para atualização do autor.');
-        }
+
+        Object.values({ nome: dados.nome, nacionalidade: dados.nacionalidade }).forEach(valor => {
+            const validacao = isTextoValido(valor);
+
+            if (!validacao.ok) {
+                throw new AppError(validacao.msg);
+            }
+        });
+
         const atualizado = await this.autorRepository.atualizar(dados);
         if (!atualizado) {
             throw new AppError('Não foi possível atualizar o autor.');
