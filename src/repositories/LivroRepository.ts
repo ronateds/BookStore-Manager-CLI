@@ -1,5 +1,5 @@
 import { ILivro } from '../models/Livro';
-import { CrudRepository } from './crudRepositort';
+import { CrudRepository } from './CrudRepository';
 
 export class LivroRepository extends CrudRepository<ILivro> {
   constructor() {
