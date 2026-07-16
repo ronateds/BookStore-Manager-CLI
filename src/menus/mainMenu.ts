@@ -24,11 +24,10 @@ export async function menuPrincipal(): Promise<void> {
                 await menuAutores();
                 msg = null;
                 continue;
-            case '2':
+            case 1:
                 await menuLivros();
                 msg = null;
                 continue;
-            case '-1':
             case -2:
                 await encerrrar();
                 break;
