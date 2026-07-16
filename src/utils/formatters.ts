@@ -1,7 +1,10 @@
-export function header(nome: string, msg: string | null = null): void {
-    console.clear();
-    console.log('='.repeat(50) + '\n' +' '.repeat(5) + `BookStore Manager CLI - ${ nome }\n` + '='.repeat(50) + '\n');
-    if(msg) {
-        console.log(msg, '\n');
-    }
+import { IAutor } from "../models/Autor";
+
+export function listarTodosAutores(autores: IAutor[]): void {
+    autores.forEach(autor => listarAutor(autor));
+    console.log();
+}
+
+export function listarAutor(autor: IAutor): void {
+    console.log(`[${ autor.id }] ${ autor.nome } - ${ autor.nacionalidade }`);
 }
