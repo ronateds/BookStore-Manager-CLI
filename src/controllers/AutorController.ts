@@ -2,7 +2,8 @@ import { input } from "@inquirer/i18n";
 import { AutorService } from "../services/AutorService";
 import { tratarErro } from "../utils/tratarErro";
 import { IAutor } from "../models/Autor";
-import { listarTodosAutores } from "../utils/formatters";
+import { listarAutor, listarTodosAutores } from "../utils/formatters";
+import { AppError } from "../utils/AppError";
 
 export class AutorController {
     private autorService = new AutorService();
@@ -48,12 +49,27 @@ export class AutorController {
 
     async atualizar(): Promise<void> {
         try {
+            // Procura autor por id primeiro
             const id = Number(await input({ message: 'Informe o id do autor: ' }));
-            const nome = await input({ message: 'Novo nome: ' });
-            const nacionalidade = await input({ message: 'Nova nacionalidade: ' });
+            const autor = await this.autorService.buscarPorId(id);
+            if (!autor) throw new AppError(`Não foi encontrado autor com id: ${ id }`);
 
-            const autor = await this.autorService.atualizar({ id, nome, nacionalidade });
-            console.log(`\nAutor atualizado com sucesso! [${ autor.id }] ${ autor.nome }\n`);
+            // Pede inputs ao usuario definindo como padrão os atributos do autor existente
+            const nome = await input({ message: 'Nome do Autor(a): ', default: autor.nome });
+            const nacionalidade = await input({ message: 'Nacionalidade: ', default: autor.nacionalidade });
+
+            // Atualiza o autor
+            const autorAtualizado = await this.autorService.atualizar(id, {
+                id,
+                nome,
+                nacionalidade
+            });
+
+            if (!autorAtualizado) throw new AppError('Livro não foi atualizado.');
+            
+            console.log(`\nAutor atualizado com sucesso!\n`);
+            listarAutor(autorAtualizado);
+            console.log();
         } catch (error) {
             tratarErro(error);
         }
