@@ -7,16 +7,11 @@ export class AutorService {
     private autorRepository = new AutorRepository();
 
     async listar(): Promise<Autor[]> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                resolve(await this.autorRepository.listarTodos());
-            } catch (error) {
-                reject(error);
-            }
-        })
+        return await this.autorRepository.listarTodos();
     }
 
     async cadastrar(dados: Omit<IAutor, "id">): Promise<Autor | undefined> {
+        // TODO melhorar validação
         if (!isTextoValido(dados.nome)) {
             throw new AppError('Nome do autor inválido. Informe pelo menos 2 caracteres.');
         }

@@ -8,20 +8,18 @@ export class AutorController {
     private autorService = new AutorService();
 
     async listar(): Promise<void> {
-        return new Promise(async (resolve) => {
-            try {
-                const autores: IAutor[] = await this.autorService.listar();
+        try {
+            const autores: IAutor[] = await this.autorService.listar();
 
-                autores.length ?
-                    listarTodosAutores(autores) :
-                    console.log('Nenhum autor cadastrado.\n');
+            autores.length ?
+                listarTodosAutores(autores) :
+                console.log('Nenhum autor cadastrado.\n');
 
-                resolve();
-            } catch (error) {
-                tratarErro(error);
-                resolve()
-            }
-        })
+            return;
+        } catch (error) {
+            tratarErro(error);
+            return;
+        }
     }
 
     async cadastrar(): Promise<void> {
@@ -34,7 +32,7 @@ export class AutorController {
                 console.log(`\nAutor(a) ${ autor.nome } cadastrado com sucesso! (id: ${ autor.id })\n`);
             }
         } catch (error) {
-            console.log(error);
+            tratarErro(error);
         }
     }
 
