@@ -33,7 +33,7 @@ export function tratarErro(error: any): void {
 
     if (error instanceof Error) {
         console.error('\nOcorreu um erro inesperado ao processar a operação:');
-        console.error(error.message);
+        console.error(error.message, '\n');
         if (process.env.DEBUG === 'true') {
             console.debug(error.stack);
         }

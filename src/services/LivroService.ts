@@ -1,78 +1,80 @@
 import { LivroRepository } from '../repositories/LivroRepository';
 import { AutorRepository } from '../repositories/AutorRepository';
-import { ILivro, ILivroComAutor, Livro } from '../models/Livro';
+import { ILivro } from '../models/Livro';
 import { AppError } from '../utils/AppError';
-import { isAnoValido, isInteiroNaoNegativo, isTextoValido } from '../utils/validators';
+import { isAnoValido, isInteiroNaoNegativo, isTituloValido } from '../utils/validators';
 
 export class LivroService {
   private livroRepository = new LivroRepository();
   private autorRepository = new AutorRepository();
 
-  async cadastrar(dados: ILivro): Promise<Livro> {
-    if (!isTextoValido(dados.titulo)) {
-      throw new AppError('Título do livro inválido. Informe pelo menos 2 caracteres.');
-    }
-    if (!isAnoValido(dados.anoPublicacao)) {
-      throw new AppError('Ano de publicação inválido.');
-    }
-    if (!isInteiroNaoNegativo(dados.quantidadeTotal)) {
-      throw new AppError('Quantidade total inválida.');
+  async listar(): Promise<ILivro[]> {
+    return await this.livroRepository.listarTodos();
+  }
+
+  async cadastrar(dados: Omit<ILivro, "id">): Promise<ILivro | undefined> {
+    const validacaoTitulo = isTituloValido(dados.titulo);
+    if (!validacaoTitulo.ok) {
+      throw new AppError(validacaoTitulo.msg);
     }
 
-    const autor = await this.autorRepository.buscarPorId(dados.autorId);
+    const validacaoAno = isAnoValido(dados.ano_publicacao);
+    if (!validacaoAno.ok) {
+      throw new AppError(validacaoAno.msg);
+    }
+
+    const validacaoQuantidade = isInteiroNaoNegativo(dados.quantidade_total)
+    if (!validacaoQuantidade.ok) {
+      throw new AppError(validacaoQuantidade.msg);
+    }
+
+    const autor = await this.autorRepository.buscarPorId(dados.autor_id);
     if (!autor) {
-      throw new AppError(`Autor com id ${dados.autorId} não encontrado. Cadastre o autor antes do livro.`);
+      throw new AppError(`Autor com id ${ dados.autor_id } não encontrado. Cadastre o autor antes do livro.`);
     }
 
-    const livroParaCriar: ILivro = {
+    const livroParaCriar: Omit<ILivro, "id"> = {
       ...dados,
-      quantidadeDisponivel: dados.quantidadeTotal,
+      quantidade_disponivel: dados.quantidade_total,
     };
 
     return this.livroRepository.criar(livroParaCriar);
- }
-  
-  async listar(): Promise<ILivroComAutor[]> {
-    return this.livroRepository.listarTodos();
- }
+  }
 
-  async buscarPorId(id: number): Promise<Livro> {
+  async buscarPorId(id: number): Promise<ILivro> {
     const livro = await this.livroRepository.buscarPorId(id);
     if (!livro) {
-      throw new AppError(`Livro com id ${id} não encontrado.`);
+      throw new AppError(`Livro com id ${ id } não encontrado.`);
     }
     return livro;
   }
 
-  async atualizar(id: number, dados: ILivro): Promise<Livro> {
-    const livroExistente = await this.buscarPorId(id);
-
-    if (!isTextoValido(dados.titulo)) {
-      throw new AppError('Título do livro inválido.');
-    }
-    if (!isAnoValido(dados.anoPublicacao)) {
-      throw new AppError('Ano de publicação inválido.');
+  async atualizar(id: number, dados: ILivro): Promise<ILivro> {
+    const validacaoTitulo = isTituloValido(dados.titulo);
+    if (!validacaoTitulo.ok) {
+      throw new AppError(validacaoTitulo.msg);
     }
 
-    const autor = await this.autorRepository.buscarPorId(dados.autorId);
-    if (!autor) {
-      throw new AppError(`Autor com id ${dados.autorId} não encontrado.`);
+    const validacaoAno = isAnoValido(dados.ano_publicacao);
+    if (!validacaoAno.ok) {
+      throw new AppError(validacaoAno.msg);
     }
 
-    
-    const quantidadeEmprestada = livroExistente.quantidadeTotal - livroExistente.quantidadeDisponivel;
-    const novaQuantidadeDisponivel = dados.quantidadeTotal - quantidadeEmprestada;
-
-    if (novaQuantidadeDisponivel < 0) {
-      throw new AppError(
-        `Não é possível reduzir a quantidade total abaixo de ${quantidadeEmprestada} (livros atualmente emprestados).`,
-      );
+    const validacaoQuantidade = isInteiroNaoNegativo(dados.quantidade_total)
+    if (!validacaoQuantidade.ok) {
+      throw new AppError(validacaoQuantidade.msg);
     }
 
-    const atualizado = await this.livroRepository.atualizar(id, {
-      ...dados,
-      quantidadeDisponivel: novaQuantidadeDisponivel,
-    });
+    if (dados.quantidade_disponivel < 0) {
+      throw new AppError('Não é possível reduzir a quantidade disponível abaixo de 0.');
+    }
+
+
+    if (dados.quantidade_total < dados.quantidade_disponivel) {
+      throw new AppError('Não é possível ter menos livros totais do que livros emprestados');
+    }
+
+    const atualizado = await this.livroRepository.atualizar(id, dados);
 
     if (!atualizado) {
       throw new AppError('Não foi possível atualizar o livro.');
@@ -81,13 +83,6 @@ export class LivroService {
   }
 
   async remover(id: number): Promise<void> {
-    await this.buscarPorId(id);
-    const possuiEmprestimos = await this.livroRepository.possuiEmprestimosVinculados(id);
-    if (possuiEmprestimos) {
-      throw new AppError('Não é possível remover o livro: existem empréstimos vinculados a ele.');
-    }
     await this.livroRepository.remover(id);
   }
-  
 }
-

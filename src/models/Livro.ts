@@ -1,34 +1,34 @@
 export interface ILivro {
-  id?: number;
+  id: number;
   titulo: string;
-  anoPublicacao: number;
-  quantidadeTotal: number;
-  quantidadeDisponivel: number;
-  autorId: number;
+  ano_publicacao: number;
+  quantidade_total: number;
+  quantidade_disponivel: number;
+  autor_id: number;
 }
 
 export class Livro implements ILivro {
-  id?: number;
+  id: number;
   titulo: string;
-  anoPublicacao: number;
-  quantidadeTotal: number;
-  quantidadeDisponivel: number;
-  autorId: number;
+  ano_publicacao: number;
+  quantidade_total: number;
+  quantidade_disponivel: number;
+  autor_id: number;
 
   constructor(
+    id: number,
     titulo: string,
-    anoPublicacao: number,
-    quantidadeTotal: number,
-    quantidadeDisponivel: number,
-    autorId: number,
-    id?: number,
+    ano_publicacao: number,
+    quantidade_total: number,
+    quantidade_disponivel: number,
+    autor_id: number,
   ) {
+    this.id = id
     this.titulo = titulo;
-    this.anoPublicacao = anoPublicacao;
-    this.quantidadeTotal = quantidadeTotal;
-    this.quantidadeDisponivel = quantidadeDisponivel;
-    this.autorId = autorId;
-    if (id !== undefined) this.id = id;
+    this.ano_publicacao = ano_publicacao;
+    this.quantidade_total = quantidade_total;
+    this.quantidade_disponivel = quantidade_disponivel;
+    this.autor_id = autor_id;
   }
 }
 
