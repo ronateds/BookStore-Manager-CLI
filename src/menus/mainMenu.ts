@@ -1,6 +1,7 @@
 import { menuAutores } from './autorMenu';
 import { encerrrar } from '../utils/encerrar';
 import { escolherDoMenu, header, opcaoMenu } from '../utils/menuHelper';
+import { menuLivros } from './LivroMenu';
 
 export async function menuPrincipal(): Promise<void> {
     let msg;
@@ -21,6 +22,10 @@ export async function menuPrincipal(): Promise<void> {
         switch (opcao) {
             case 0:
                 await menuAutores();
+                msg = null;
+                continue;
+            case 1:
+                await menuLivros();
                 msg = null;
                 continue;
             case -2:
