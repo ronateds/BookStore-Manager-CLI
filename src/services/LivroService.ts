@@ -71,7 +71,7 @@ export class LivroService {
 
 
     if (dados.quantidade_total < dados.quantidade_disponivel) {
-      throw new AppError('Não é possível ter menos livros totais do que livros emprestados');
+      throw new AppError('Numero de livros total precisa ser igual ou maior que livros disponíveis.');
     }
 
     const atualizado = await this.livroRepository.atualizar(id, dados);
