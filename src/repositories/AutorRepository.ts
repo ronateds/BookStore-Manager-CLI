@@ -1,35 +1,27 @@
 import { pool } from '../database/connection';
 import { Autor, IAutor } from '../models/Autor';
+import { CrudRepository } from './CrudRepository';
 
-export class AutorRepository {
-    async listarTodos(): Promise<Autor[]> {
-        try {
-            const resultado = await pool.query<IAutor>(`SELECT * FROM autores`);
-            return resultado.rows;
-        } catch (error) {
-            throw error
-        }
+export class AutorRepository extends CrudRepository<IAutor> {
+    constructor() {
+        super('autores');
     }
 
     async cadastrar(autor: Omit<IAutor, "id">): Promise<Autor | undefined> {
-        const resultado = await pool.query<IAutor>(
-            `INSERT INTO autores (nome, nacionalidade) VALUES ($1, $2) RETURNING *`,
-            [autor.nome, autor.nacionalidade],
-        );
-        return resultado.rows[0];
+        return this.create(autor);
     }
+
+    async listarTodos(): Promise<Autor[]> {
+        return this.readAll();
+    }
+
 
     async buscarPorId(id: number): Promise<Autor | undefined> {
-        const resultado = await pool.query<IAutor>(`SELECT * FROM autores WHERE id = $1`, [id]);
-        return resultado.rows[0];
+        return this.readById(id);
     }
 
-    async atualizar(autor: IAutor): Promise<Autor | undefined> {
-        const resultado = await pool.query<IAutor>(
-            `UPDATE autores SET nome = $1, nacionalidade = $2 WHERE id = $3 RETURNING *`,
-            [autor.nome, autor.nacionalidade, autor.id],
-        );
-        return resultado.rows[0];
+    async atualizar(id: number, autor: IAutor): Promise<Autor | undefined> {
+        return this.update(id, autor)
     }
 
     async remover(id: number): Promise<boolean> {

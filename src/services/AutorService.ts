@@ -30,8 +30,8 @@ export class AutorService {
         return autor;
     }
 
-    async atualizar(dados: IAutor): Promise<Autor> {
-        await this.buscarPorId(dados.id);
+    async atualizar(id: number, dados: IAutor): Promise<Autor> {
+        await this.buscarPorId(id);
 
         Object.values({ nome: dados.nome, nacionalidade: dados.nacionalidade }).forEach(valor => {
             const validacao = isTextoValido(valor);
@@ -41,7 +41,7 @@ export class AutorService {
             }
         });
 
-        const atualizado = await this.autorRepository.atualizar(dados);
+        const atualizado = await this.autorRepository.atualizar(id, dados);
         if (!atualizado) {
             throw new AppError('Não foi possível atualizar o autor.');
         }
