@@ -3,11 +3,17 @@ import { Autor, IAutor } from '../models/Autor';
 
 export class AutorRepository {
     async listarTodos(): Promise<Autor[]> {
-        const resultado = await pool.query<IAutor>(`SELECT * FROM public.autores`);
-        return resultado.rows;
+        return new Promise(async (resolve, reject) => {
+            try {
+                const resultado = await pool.query<IAutor>(`SELECT * FROM autores`);
+                resolve(resultado.rows);
+            } catch (error) {
+                reject(error);
+            }
+        })
     }
 
-    async cadastrar(autor: IAutor): Promise<Autor | undefined> {
+    async cadastrar(autor: Omit<IAutor, "id">): Promise<Autor | undefined> {
         const resultado = await pool.query<IAutor>(
             `INSERT INTO autores (nome, nacionalidade) VALUES ($1, $2) RETURNING *`,
             [autor.nome, autor.nacionalidade],
@@ -21,10 +27,10 @@ export class AutorRepository {
         return resultado.rows[0];
     }
 
-    async atualizar(id: number, autor: IAutor): Promise<Autor | null> {
+    async atualizar(autor: IAutor): Promise<Autor | null> {
         const resultado = await pool.query(
             `UPDATE autores SET nome = $1, nacionalidade = $2 WHERE id = $3 RETURNING *`,
-            [autor.nome, autor.nacionalidade, id],
+            [autor.nome, autor.nacionalidade, autor.id],
         );
         if (resultado.rows.length === 0) return null;
         return resultado.rows[0];

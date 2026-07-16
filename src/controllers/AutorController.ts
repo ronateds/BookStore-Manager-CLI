@@ -1,25 +1,27 @@
 import { input } from "@inquirer/i18n";
 import { AutorService } from "../services/AutorService";
 import { tratarErro } from "../utils/tratarErro";
+import { IAutor } from "../models/Autor";
+import { listarTodosAutores } from "../utils/formatters";
 
 export class AutorController {
     private autorService = new AutorService();
 
     async listar(): Promise<void> {
-        try {
-            const autores = await this.autorService.listar();
-            if (autores.length === 0) {
-                console.log('Nenhum autor cadastrado.\n');
-                return;
+        return new Promise(async (resolve) => {
+            try {
+                const autores: IAutor[] = await this.autorService.listar();
+
+                autores.length ?
+                    listarTodosAutores(autores) :
+                    console.log('Nenhum autor cadastrado.\n');
+
+                resolve();
+            } catch (error) {
+                tratarErro(error);
+                resolve()
             }
-            autores.forEach((a) => {
-                console.log(`[${ a.id }] ${ a.nome } - ${ a.nacionalidade }`);
-            });
-            console.log(); // pra deixar uma linha vazia
-            return;
-        } catch (error) {
-            tratarErro(error);
-        }
+        })
     }
 
     async cadastrar(): Promise<void> {
@@ -28,8 +30,8 @@ export class AutorController {
             const nacionalidade = await input({ message: "Nacionalidade: " })
 
             const autor = await this.autorService.cadastrar({ nome, nacionalidade });
-            if(autor) {
-                console.log(`\nAutor(a) ${ autor.nome } cadastrado com sucesso! (id: ${ autor.id }\n)`);
+            if (autor) {
+                console.log(`\nAutor(a) ${ autor.nome } cadastrado com sucesso! (id: ${ autor.id })\n`);
             }
         } catch (error) {
             console.log(error);
@@ -48,11 +50,11 @@ export class AutorController {
 
     async atualizar(): Promise<void> {
         try {
-            const id = Number(await input({ message: 'Informe o id do autor: '}));
-            const nome = await input({ message: 'Novo nome: '});
-            const nacionalidade = await input({ message: 'Nova nacionalidade: '});
+            const id = Number(await input({ message: 'Informe o id do autor: ' }));
+            const nome = await input({ message: 'Novo nome: ' });
+            const nacionalidade = await input({ message: 'Nova nacionalidade: ' });
 
-            const autor = await this.autorService.atualizar(id, { nome, nacionalidade });
+            const autor = await this.autorService.atualizar({ id, nome, nacionalidade });
             console.log(`\nAutor atualizado com sucesso! [${ autor.id }] ${ autor.nome }\n`);
         } catch (error) {
             tratarErro(error);

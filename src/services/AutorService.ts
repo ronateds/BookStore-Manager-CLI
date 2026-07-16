@@ -7,10 +7,16 @@ export class AutorService {
     private autorRepository = new AutorRepository();
 
     async listar(): Promise<Autor[]> {
-        return this.autorRepository.listarTodos();
+        return new Promise(async (resolve, reject) => {
+            try {
+                resolve(await this.autorRepository.listarTodos());
+            } catch (error) {
+                reject(error);
+            }
+        })
     }
 
-    async cadastrar(dados: IAutor): Promise<Autor | undefined> {
+    async cadastrar(dados: Omit<IAutor, "id">): Promise<Autor | undefined> {
         if (!isTextoValido(dados.nome)) {
             throw new AppError('Nome do autor inválido. Informe pelo menos 2 caracteres.');
         }
@@ -28,12 +34,12 @@ export class AutorService {
         return autor;
     }
 
-    async atualizar(id: number, dados: IAutor): Promise<Autor> {
-        await this.buscarPorId(id);
+    async atualizar(dados: IAutor): Promise<Autor> {
+        await this.buscarPorId(dados.id);
         if (!isTextoValido(dados.nome) || !isTextoValido(dados.nacionalidade)) {
             throw new AppError('Dados inválidos para atualização do autor.');
         }
-        const atualizado = await this.autorRepository.atualizar(id, dados);
+        const atualizado = await this.autorRepository.atualizar(dados);
         if (!atualizado) {
             throw new AppError('Não foi possível atualizar o autor.');
         }
