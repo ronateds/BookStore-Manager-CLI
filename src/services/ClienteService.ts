@@ -24,7 +24,13 @@ export class ClienteService {
         return this.clienteRepository.cadastrar(dados);
     }
 
-    // TODO buscarPorId
+    async buscarPorId(id: number): Promise<Cliente> {
+        const cliente = await this.clienteRepository.buscarPorId(id);
+        if (!cliente) {
+            throw new AppError(`Cliente com id ${ id } não encontrado.`);
+        }
+        return cliente;
+    }
 
     // TODO atualizar
 
