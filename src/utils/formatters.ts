@@ -1,5 +1,6 @@
 import { IAutor } from "../models/Autor";
 import { ICliente } from "../models/Cliente";
+import { IEmprestimo } from "../models/Emprestimo";
 import { ILivro } from "../models/Livro";
 
 export function listarTodosAutores(autores: IAutor[]): void {
@@ -29,4 +30,13 @@ export function listarTodosClientes(clientes: ICliente[]): void {
 
 export function listarCliente(cliente: ICliente): void {
     console.log(`[${ cliente.id }] ${ cliente.nome } - ${ cliente.email }`);
+}
+
+export function listarTodosEmprestimos(emprestimos: IEmprestimo[]): void {
+    emprestimos.forEach(emprestimo => listarEmprestimo(emprestimo));
+    console.log();
+}
+
+export function listarEmprestimo(emprestimo: IEmprestimo): void {
+    console.log(`[${ emprestimo.id }] Cliente: ${ emprestimo.cliente_id } Data: ${ emprestimo.data_emprestimo } Devolução: ${ emprestimo.data_devolucao }`);
 }

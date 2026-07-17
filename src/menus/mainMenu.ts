@@ -1,8 +1,9 @@
-import { menuAutores } from './autorMenu';
 import { encerrrar } from '../utils/encerrar';
 import { escolherDoMenu, header, opcaoMenu } from '../utils/menuHelper';
+import { menuAutores } from './autorMenu';
 import { menuLivros } from './livroMenu';
 import { clienteMenu } from './clienteMenu';
+import { emprestimoMenu } from './emprestimoMenu';
 
 export async function menuPrincipal(): Promise<void> {
     let msg;
@@ -33,9 +34,12 @@ export async function menuPrincipal(): Promise<void> {
                 await clienteMenu();
                 msg = null;
                 continue;
+            case 3:
+                await emprestimoMenu();
+                msg = null;
+                continue;
             case -2:
                 await encerrrar();
-                break;
             default:
                 msg = 'Opção inválida. Tente novamente.';
                 continue;
