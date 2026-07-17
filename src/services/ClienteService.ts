@@ -50,5 +50,7 @@ export class ClienteService {
         return atualizado;
     }
 
-    // TODO remover
+    async remover(id: number): Promise<void> {
+        await this.clienteRepository.remover(id);
+    }
 }
