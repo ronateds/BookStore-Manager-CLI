@@ -37,7 +37,15 @@ export class ClienteController {
         }
     }
 
-    // TODO buscarPorId
+    async buscarPorId(): Promise<void> {
+        try {
+            const id = Number(await input({ message: "Informe o id do cliente(a): " }));
+            const cliente = await this.clienteService.buscarPorId(id);
+            listarCliente(cliente);
+        } catch (error) {
+            tratarErro(error);
+        }
+    }
 
     // TODO atualizar
 
