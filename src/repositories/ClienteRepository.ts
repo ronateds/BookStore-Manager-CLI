@@ -14,8 +14,9 @@ export class ClienteRepository extends CrudRepository<ICliente> {
         return this.readAll();
     }
 
-    // TODO buscarPorId
-
+    async buscarPorId(id: number): Promise<ICliente | undefined> {
+        return this.readById(id);
+    }
     // TODO atualizar
 
     // TODO remover
