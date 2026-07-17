@@ -49,11 +49,6 @@ export class AutorService {
     }
 
     async remover(id: number): Promise<void> {
-        await this.buscarPorId(id);
-        const possuiLivros = await this.autorRepository.possuiLivrosVinculados(id);
-        if (possuiLivros) {
-            throw new AppError('Não é possível remover o autor: existem livros vinculados a ele.');
-        }
         await this.autorRepository.remover(id);
     }
 }
