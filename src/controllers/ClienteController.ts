@@ -72,5 +72,13 @@ export class ClienteController {
         }
     }
 
-    // TODO remover
+    async remover(): Promise<void> {
+        try {
+            const id = Number(await input({ message: 'Informe o id do cliente: ' }));
+            await this.clienteService.remover(id);
+            console.log('\nCliente removido com sucesso!\n');
+        } catch (error) {
+            tratarErro(error);
+        }
+    }
 }
