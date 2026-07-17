@@ -10,7 +10,9 @@ export class ClienteRepository extends CrudRepository<ICliente> {
         return this.create(cliente);
     }
 
-    // TODO listarTodos
+    async listarTodos(): Promise<ICliente[]> {
+        return this.readAll();
+    }
 
     // TODO buscarPorId
 
