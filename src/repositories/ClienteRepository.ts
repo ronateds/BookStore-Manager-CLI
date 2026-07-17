@@ -1,20 +1,20 @@
-import { ICliente } from "../models/Cliente";
+import { Cliente, ICliente } from "../models/Cliente";
 import { CrudRepository } from "./CrudRepository";
 
-export class ClienteRepository extends CrudRepository<ICliente> {
+export class ClienteRepository extends CrudRepository<Cliente> {
     constructor() {
         super('clientes')
     }
 
-    async cadastrar(cliente: Omit<ICliente, "id">): Promise<ICliente | undefined> {
+    async cadastrar(cliente: Omit<ICliente, "id">): Promise<Cliente | undefined> {
         return this.create(cliente);
     }
 
-    async listarTodos(): Promise<ICliente[]> {
+    async listarTodos(): Promise<Cliente[]> {
         return this.readAll();
     }
 
-    async buscarPorId(id: number): Promise<ICliente | undefined> {
+    async buscarPorId(id: number): Promise<Cliente | undefined> {
         return this.readById(id);
     }
     
