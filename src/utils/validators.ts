@@ -1,4 +1,4 @@
-type retornoValidacao = {
+export type retornoValidacao = {
     ok: boolean,
     msg: string | undefined
 }
@@ -56,6 +56,44 @@ export function isTituloValido(valor: string | undefined | null, minLength = 2):
     return retorno
 }
 
+export function isEmailValido(email: string | undefined | null): retornoValidacao {
+    let retorno: retornoValidacao = {
+        ok: false,
+        msg: undefined
+    }
+
+    if (!email) {
+        retorno.msg = 'Campo email vazio'
+        return retorno;
+    }
+
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const test = regex.test(email.trim());
+
+    if(test) {
+        retorno.ok = true
+    } else {
+        retorno.msg = 'Email inválido'
+    }
+
+    return retorno
+}
+
+export function isInteiroPositivo(valor: number | undefined | null): retornoValidacao {
+    let retorno: retornoValidacao = {
+        ok: false,
+        msg: undefined
+    }
+
+    if(typeof valor === 'number' && Number.isInteger(valor) && valor > 0) {
+        retorno.ok = true;
+    } else {
+        retorno.msg = 'Não é um numero inteiro positivo.'
+    }
+
+    return retorno
+}
+
 export function isAnoValido(ano: number | undefined | null): retornoValidacao {
     const anoAtual = new Date().getFullYear();
     if (typeof ano === 'number' && Number.isInteger(ano) && ano <= anoAtual) {
@@ -83,15 +121,4 @@ export function isInteiroNaoNegativo(valor: number | undefined | null): retornoV
             msg: 'Numero inválido, entre um numero inteiro não negativo.'
         }
     }
-}
-
-
-export function isEmailValido(email: string | undefined | null): boolean {
-    if (!email) return false;
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email.trim());
-}
-
-export function isInteiroPositivo(valor: number | undefined | null): boolean {
-    return typeof valor === 'number' && Number.isInteger(valor) && valor > 0;
 }
