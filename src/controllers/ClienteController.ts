@@ -1,3 +1,4 @@
+import { input } from "@inquirer/i18n";
 import { ICliente } from "../models/Cliente";
 import { ClienteService } from "../services/ClienteService";
 import { listarCliente, listarTodosClientes } from "../utils/formatters";
@@ -22,7 +23,19 @@ export class ClienteController {
         }
     }
 
-    // TODO cadastrar
+    async cadastrar(): Promise<void> {
+        try {
+            const nome = await input({ message: "Nome: " });
+            const email = await input({ message: "Email: " })
+
+            const cliente = await this.clienteService.cadastrar({ nome, email });
+            if (cliente) {
+                console.log(`\nCliente ${ cliente.nome } cadastrado com sucesso! (id: ${ cliente.id })\n`);
+            }
+        } catch (error) {
+            tratarErro(error);
+        }
+    }
 
     // TODO buscarPorId
 
