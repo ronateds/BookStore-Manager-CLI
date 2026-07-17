@@ -16,9 +16,9 @@ export class ClienteService {
             throw new AppError(validacaoNome.msg);
         }
 
-        const validacaoEmail= isEmailValido(dados.nome);
+        const validacaoEmail= isEmailValido(dados.email);
         if (!validacaoEmail.ok) {
-            throw new AppError(validacaoNome.msg);
+            throw new AppError(validacaoEmail.msg);
         }
 
         return this.clienteRepository.cadastrar(dados);
