@@ -6,7 +6,9 @@ export class ClienteRepository extends CrudRepository<ICliente> {
         super('clientes')
     }
 
-    // TODO cadastrar
+    async cadastrar(cliente: Omit<ICliente, "id">): Promise<ICliente | undefined> {
+        return this.create(cliente);
+    }
 
     // TODO listarTodos
 
