@@ -38,5 +38,5 @@ export function listarTodosEmprestimos(emprestimos: IEmprestimo[]): void {
 }
 
 export function listarEmprestimo(emprestimo: IEmprestimo): void {
-    console.log(`[${ emprestimo.id }] Cliente: ${ emprestimo.cliente_id } Data: ${ emprestimo.data_emprestimo } Devolução: ${ emprestimo.data_devolucao }`);
+    console.log(`[${ emprestimo.id }] Cliente: ${ emprestimo.cliente_id } Data: ${ emprestimo.data_emprestimo?.toLocaleDateString() } Devolução: ${ emprestimo.data_devolucao?.toLocaleDateString() }`);
 }

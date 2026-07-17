@@ -2,8 +2,8 @@ export interface IEmprestimo {
     id: number;
     cliente_id: number;
     livro_id: number;
-    data_emprestimo: Date;
-    data_devolucao: Date | null;
+    data_emprestimo?: Date;
+    data_devolucao?: Date | null;
 }
 
 export interface IEmprestimoDetalhado extends IEmprestimo {
@@ -15,8 +15,8 @@ export class Emprestimo implements IEmprestimo {
     id: number;
     cliente_id: number;
     livro_id: number;
-    data_emprestimo: Date;
-    data_devolucao: Date | null;
+    data_emprestimo?: Date;
+    data_devolucao?: Date | null;
 
     constructor(
         id: number,
