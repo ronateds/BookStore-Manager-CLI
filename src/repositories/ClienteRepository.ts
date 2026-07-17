@@ -22,5 +22,7 @@ export class ClienteRepository extends CrudRepository<ICliente> {
         return this.update(id, cliente)
     }
 
-    // TODO remover
+    async remover(id: number): Promise<boolean> {
+        return this.delete(id);
+    }
 }
