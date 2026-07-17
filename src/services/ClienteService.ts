@@ -32,7 +32,23 @@ export class ClienteService {
         return cliente;
     }
 
-    // TODO atualizar
+    async atualizar(id: number, dados: ICliente): Promise<Cliente> {
+        const validacaoNome = isTextoValido(dados.nome);
+        if (!validacaoNome.ok) {
+            throw new AppError(validacaoNome.msg);
+        }
+
+        const validacaoEmail = isEmailValido(dados.nome);
+        if (!validacaoEmail.ok) {
+            throw new AppError(validacaoNome.msg);
+        }
+
+        const atualizado = await this.clienteRepository.atualizar(id, dados);
+        if (!atualizado) {
+            throw new AppError('Não foi possível atualizar o cliente.');
+        }
+        return atualizado;
+    }
 
     // TODO remover
 }
