@@ -18,7 +18,9 @@ export class EmprestimoRepository extends CrudRepository<IEmprestimo> {
         return this.readById(id);
     }
 
-    // TODO atualizar
+    async atualizar(id: number, emprestimo: IEmprestimo): Promise<Emprestimo | undefined> {
+        return this.update(id, emprestimo)
+    }
 
     // TODO remover
 }
