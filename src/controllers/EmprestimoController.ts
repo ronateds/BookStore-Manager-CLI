@@ -37,7 +37,18 @@ export class EmprestimoController {
         }
     }
 
-    // TODO buscarPorId
+    async buscarPorId(): Promise<void> {
+        try {
+            const id = Number(await input({ message: "Informe o id do emprestimo: " }));
+            const emprestimo = await this.emprestimoService.buscarPorId(id);
+
+            console.log();
+            listarEmprestimo(emprestimo);
+            console.log();
+        } catch (error) {
+            tratarErro(error);
+        }
+    }
 
     // TODO atualizar
 
