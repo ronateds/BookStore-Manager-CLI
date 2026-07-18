@@ -10,7 +10,9 @@ export class EmprestimoRepository extends CrudRepository<IEmprestimo> {
         return this.readAll();
     }
 
-    // TODO cadastrar
+    async cadastrar(emprestimo: Omit<IEmprestimo, "id">): Promise<Emprestimo | undefined> {
+        return this.create(emprestimo);
+    }
 
     // TODO buscarPorId
 
