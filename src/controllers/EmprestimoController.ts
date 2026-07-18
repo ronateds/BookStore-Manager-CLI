@@ -83,5 +83,13 @@ export class EmprestimoController {
         }
     }
 
-    // TODO remover
+    async remover(): Promise<void> {
+        try {
+            const id = Number(await input({ message: 'Informe o id do emprestimo: ' }));
+            await this.emprestimoService.remover(id);
+            console.log('\nEmprestimo removido com sucesso!\n');
+        } catch (error) {
+            tratarErro(error);
+        }
+    }
 }
