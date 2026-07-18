@@ -6,7 +6,9 @@ export class EmprestimoRepository extends CrudRepository<IEmprestimo> {
         super('emprestimos');
     }
 
-    // TODO listar
+    async listar(): Promise<Emprestimo[]> {
+        return this.readAll();
+    }
 
     // TODO cadastrar
 
