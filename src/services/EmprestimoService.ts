@@ -52,5 +52,7 @@ export class EmprestimoService {
         return atualizado;
     }
 
-    // TODO remover
+    async remover(id: number): Promise<void> {
+        await this.emprestimoRepository.remover(id);
+    }
 }
