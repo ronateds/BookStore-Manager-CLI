@@ -32,7 +32,25 @@ export class EmprestimoService {
         return emprestimo;
     }
 
-    // TODO atualizar
+    async atualizar(id: number, dados: IEmprestimo): Promise<Emprestimo> {
+        await this.buscarPorId(id);
+
+        const validacaoClienteId = isInteiroPositivo(dados.cliente_id);
+        if (!validacaoClienteId.ok) {
+            throw new AppError(validacaoClienteId.msg);
+        }
+
+        const validacaoLivroId = isInteiroPositivo(dados.livro_id);
+        if (!validacaoLivroId.ok) {
+            throw new AppError(validacaoLivroId.msg);
+        }
+
+        const atualizado = await this.emprestimoRepository.atualizar(id, dados);
+        if (!atualizado) {
+            throw new AppError('Não foi possível atualizar o emprestimo.');
+        }
+        return atualizado;
+    }
 
     // TODO remover
 }
