@@ -24,8 +24,13 @@ export class EmprestimoService {
         return this.emprestimoRepository.cadastrar(dados);
     }
     
-
-    // TODO buscarPorId
+    async buscarPorId(id: number): Promise<Emprestimo> {
+        const emprestimo = await this.emprestimoRepository.buscarPorId(id);
+        if (!emprestimo) {
+            throw new AppError(`Emprestimo com id ${ id } não encontrado.`);
+        }
+        return emprestimo;
+    }
 
     // TODO atualizar
 
