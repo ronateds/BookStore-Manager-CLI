@@ -22,5 +22,7 @@ export class EmprestimoRepository extends CrudRepository<IEmprestimo> {
         return this.update(id, emprestimo)
     }
 
-    // TODO remover
+    async remover(id: number): Promise<boolean> {
+        return this.delete(id);
+    }
 }
