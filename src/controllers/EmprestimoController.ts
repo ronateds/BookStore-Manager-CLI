@@ -23,7 +23,19 @@ export class EmprestimoController {
         }
     }
 
-    // TODO cadastrar
+    async cadastrar(): Promise<void> {
+        try {
+            const cliente_id = Number(await input({ message: "ID do cliente: " }));
+            const livro_id = Number(await input({ message: "ID do livro: " }));
+
+            const emprestimo = await this.emprestimoService.cadastrar({ cliente_id, livro_id });
+            if (emprestimo) {
+                console.log(`\nEmprestimo registrado com sucesso! (id: ${ emprestimo.id })\n`);
+            }
+        } catch (error) {
+            tratarErro(error);
+        }
+    }
 
     // TODO buscarPorId
 
