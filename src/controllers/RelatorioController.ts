@@ -12,9 +12,9 @@ export class RelatoriosController {
             const livros = await this.relatorioService.livrosDisponiveis();
 
             // cria arquivo csv
-            const cabecalho = `ID,Titulo,Ano de Publicação,Quantidade Disponível, Quantidade Total, ID do Autor\n`
+            const cabecalho = `ID,Título,Ano de Publicação,Quantidade Disponível, Quantidade Total, ID do Autor\n`
             const livrosCsv = livros?.reduce((acc, curr) => {
-                acc += `${ curr.id }, ${ curr.titulo }, ${ curr.ano_publicacao }, ${ curr.quantidade_disponivel }, ${ curr.quantidade_total }, ${ curr.autor_id }\n`
+                acc += `${ curr.id },${ curr.titulo },${ curr.ano_publicacao },${ curr.quantidade_disponivel },${ curr.quantidade_total },${ curr.autor_id }\n`
                 return acc
             }, cabecalho);
 
