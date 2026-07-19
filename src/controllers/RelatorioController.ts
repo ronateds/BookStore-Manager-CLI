@@ -46,4 +46,26 @@ export class RelatoriosController {
             return;
         }
     }
+
+    async livrosPorAutor(): Promise<void> {
+        try {
+            // buscar livros disponiveis
+            const livros = await this.relatorioService.livrosPorAutor();
+
+            // cria arquivo csv
+            const cabecalho = `ID,Autor,Livros\n`
+            const livrosCsv = livros?.reduce((acc, curr) => {
+                acc += `${ curr.id },${ curr.nome },${ curr.livros }\n`
+                return acc
+            }, cabecalho);
+
+            const arquivo = await gerarCSV('livros_por_autor', cabecalho, livrosCsv);
+
+            // imprimir local do arquivo gerado
+            console.log(`Relatório de livros por autor gerado com sucesso e diponível em:\n${ arquivo.caminho }\n`);
+        } catch (error) {
+            tratarErro(error);
+            return;
+        }
+    }
 }

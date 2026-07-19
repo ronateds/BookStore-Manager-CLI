@@ -4,6 +4,12 @@ export interface IAutor {
     nacionalidade: string;
 }
 
+export interface ILivrosPorAutor {
+    id: number;
+    nome: string;
+    livros: number;
+}
+
 export class Autor implements IAutor {
     id: number;
     nome: string;
