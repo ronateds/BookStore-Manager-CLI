@@ -3,7 +3,7 @@ import { ILivro } from "../models/Livro";
 import { CrudRepository } from "./CrudRepository";
 import { pool } from '../database/connection';
 import { AppError } from '../utils/AppError';
-import { IEmprestimo, IEmprestimosPorLivro } from "../models/Emprestimo";
+import { IEmprestimo, IEmprestimosAtivos, IEmprestimosPorLivro } from "../models/Emprestimo";
 import { ILivrosPorAutor } from "../models/Autor";
 
 export class RelatorioRepository {
@@ -56,6 +56,21 @@ export class RelatorioRepository {
             return resultado.rows;
         } catch (error) {
             throw new AppError('Erro ao consultar livros disponíveis');
+        }
+    }
+
+    async emprestimosAtivos(): Promise<IEmprestimosAtivos[]> {
+        try {
+            const query = `
+                SELECT e.id as emprestimo_id, c.id as cliente_id,c.nome, c.email, e.data_emprestimo FROM emprestimos e
+                LEFT JOIN clientes c
+                ON e.cliente_id = c.id
+                WHERE data_devolucao IS NULL;
+            `;
+            const resultado = await pool.query<IEmprestimosAtivos>(query);
+            return resultado.rows;
+        } catch (error) {
+            throw new AppError('Erro ao consultar livros emprestados');
         }
     }
 }

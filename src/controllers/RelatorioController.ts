@@ -69,23 +69,42 @@ export class RelatoriosController {
         }
     }
 
-    // emprestimosPorLivros
     async emprestimosPorLivro(): Promise<void> {
         try {
-            // buscar livros disponiveis
-            const livros = await this.relatorioService.emprestimosPorLivro();
+            const emprestimos = await this.relatorioService.emprestimosPorLivro();
 
             // cria arquivo csv
             const cabecalho = `ID Livro,Título,Empréstimos\n`
-            const livrosCsv = livros?.reduce((acc, curr) => {
+            const emprestimosCsv = emprestimos?.reduce((acc, curr) => {
                 acc += `${ curr.livro_id },${ curr.titulo },${ curr.emprestimos }\n`
                 return acc
             }, cabecalho);
 
-            const arquivo = await gerarCSV('emprestimos_por_livro', cabecalho, livrosCsv);
+            const arquivo = await gerarCSV('emprestimos_por_livro', cabecalho, emprestimosCsv);
 
             // imprimir local do arquivo gerado
             console.log(`Relatório de empréstimos por livro gerado com sucesso e diponível em:\n${ arquivo.caminho }\n`);
+        } catch (error) {
+            tratarErro(error);
+            return;
+        }
+    }
+
+    async emprestimosAtivos(): Promise<void> {
+        try {
+            const emprestimos = await this.relatorioService.emprestimosAtivos();
+
+            // cria arquivo csv
+            const cabecalho = `Empréstimo ID,Cliente ID,Nome,Email,Data Empréstimo\n`
+            const emprestimosCsv = emprestimos?.reduce((acc, curr) => {
+                acc += `${ curr.emprestimo_id },${ curr.cliente_id },${ curr.nome },${ curr.email },${ curr.data_emprestimo.toLocaleDateString() }\n`
+                return acc
+            }, cabecalho);
+
+            const arquivo = await gerarCSV('emprestimos_ativos', cabecalho, emprestimosCsv);
+
+            // imprimir local do arquivo gerado
+            console.log(`Relatório de empréstimos ativos gerado com sucesso e diponível em:\n${ arquivo.caminho }\n`);
         } catch (error) {
             tratarErro(error);
             return;
