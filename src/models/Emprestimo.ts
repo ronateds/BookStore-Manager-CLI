@@ -11,6 +11,20 @@ export interface IEmprestimoDetalhado extends IEmprestimo {
     nome_cliente: string;
 }
 
+export interface IEmprestimosPorLivro {
+    livro_id: number;
+    titulo: string;
+    emprestimos: number;
+}
+
+export interface IEmprestimosAtivos {
+    emprestimo_id: number;
+    cliente_id: number;
+    nome: string;
+    email: string;
+    data_emprestimo: Date;
+}
+
 export class Emprestimo implements IEmprestimo {
     id: number;
     cliente_id: number;

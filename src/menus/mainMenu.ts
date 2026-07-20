@@ -4,6 +4,7 @@ import { menuAutores } from './autorMenu';
 import { menuLivros } from './livroMenu';
 import { clienteMenu } from './clienteMenu';
 import { emprestimoMenu } from './emprestimoMenu';
+import { relatoriosMenu } from './relatorioMenu';
 
 export async function menuPrincipal(): Promise<void> {
     let msg;
@@ -16,6 +17,7 @@ export async function menuPrincipal(): Promise<void> {
             { value: 1, name: 'Livros' },
             { value: 2, name: 'Clientes' },
             { value: 3, name: 'Empréstimos' },
+            { value: 4, name: 'Gerar Relatórios' },
             { value: -2, name: 'Encerrar aplicação' }
         ];
 
@@ -36,6 +38,10 @@ export async function menuPrincipal(): Promise<void> {
                 continue;
             case 3:
                 await emprestimoMenu();
+                msg = null;
+                continue;
+            case 4:
+                await relatoriosMenu();
                 msg = null;
                 continue;
             case -2:
