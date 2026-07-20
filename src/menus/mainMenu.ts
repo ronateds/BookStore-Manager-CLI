@@ -1,7 +1,7 @@
 import { encerrrar } from '../utils/encerrar';
 import { escolherDoMenu, header, opcaoMenu } from '../utils/menuHelper';
 import { menuAutores } from './autorMenu';
-import { menuLivros } from './LivroMenu';
+import { menuLivros } from './livroMenu';
 import { clienteMenu } from './clienteMenu';
 import { emprestimoMenu } from './emprestimoMenu';
 import { relatoriosMenu } from './relatorioMenu';
