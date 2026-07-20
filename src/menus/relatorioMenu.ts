@@ -13,7 +13,7 @@ export async function relatoriosMenu(): Promise<void> {
             { value: 0, name: 'Livros disponíveis', method: 'livrosDisponiveis' },
             { value: 1, name: 'Livros emprestados', method: 'livrosEmprestados' },
             { value: 2, name: 'Livros cadastrados por autor', method: 'livrosPorAutor' },
-            { value: 3, name: 'Quantidade de empréstimos por livro', method: 'emprestimosPorLivros' },
+            { value: 3, name: 'Quantidade de empréstimos por livro', method: 'emprestimosPorLivro' },
             { value: 4, name: 'Clientes com empréstimos ativos', method: 'emprestimosAtivos' },
         ];
 

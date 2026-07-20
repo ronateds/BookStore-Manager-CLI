@@ -68,4 +68,27 @@ export class RelatoriosController {
             return;
         }
     }
+
+    // emprestimosPorLivros
+    async emprestimosPorLivro(): Promise<void> {
+        try {
+            // buscar livros disponiveis
+            const livros = await this.relatorioService.emprestimosPorLivro();
+
+            // cria arquivo csv
+            const cabecalho = `ID Livro,Título,Empréstimos\n`
+            const livrosCsv = livros?.reduce((acc, curr) => {
+                acc += `${ curr.livro_id },${ curr.titulo },${ curr.emprestimos }\n`
+                return acc
+            }, cabecalho);
+
+            const arquivo = await gerarCSV('emprestimos_por_livro', cabecalho, livrosCsv);
+
+            // imprimir local do arquivo gerado
+            console.log(`Relatório de empréstimos por livro gerado com sucesso e diponível em:\n${ arquivo.caminho }\n`);
+        } catch (error) {
+            tratarErro(error);
+            return;
+        }
+    }
 }

@@ -1,5 +1,5 @@
 import { ILivrosPorAutor } from "../models/Autor";
-import { IEmprestimo } from "../models/Emprestimo";
+import { IEmprestimo, IEmprestimosPorLivro } from "../models/Emprestimo";
 import { ILivro } from "../models/Livro";
 import { RelatorioRepository } from "../repositories/RelatorioRepository";
 
@@ -16,5 +16,9 @@ export class RelatorioService {
 
     async livrosPorAutor(): Promise<ILivrosPorAutor[]> {
         return await this.relatorioRepository.livrosPorAutor();
+    }
+
+    async emprestimosPorLivro(): Promise<IEmprestimosPorLivro[]> {
+        return await this.relatorioRepository.emprestimosPorLivro();
     }
 }
