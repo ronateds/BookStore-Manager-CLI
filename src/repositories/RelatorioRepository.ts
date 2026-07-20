@@ -1,6 +1,4 @@
-import { ICliente } from "../models/Cliente";
 import { ILivro } from "../models/Livro";
-import { CrudRepository } from "./CrudRepository";
 import { pool } from '../database/connection';
 import { AppError } from '../utils/AppError';
 import { IEmprestimo, IEmprestimosAtivos, IEmprestimosPorLivro } from "../models/Emprestimo";
