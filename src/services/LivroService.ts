@@ -2,7 +2,6 @@ import { LivroRepository } from '../repositories/LivroRepository';
 import { AutorRepository } from '../repositories/AutorRepository';
 import { ILivro } from '../models/Livro';
 import { AppError } from '../utils/AppError';
-import { isAnoValido, isInteiroNaoNegativo, isTituloValido } from '../utils/validators';
 
 export class LivroService {
   private livroRepository = new LivroRepository();
@@ -13,20 +12,6 @@ export class LivroService {
   }
 
   async cadastrar(dados: Omit<ILivro, "id">): Promise<ILivro | undefined> {
-    const validacaoTitulo = isTituloValido(dados.titulo);
-    if (!validacaoTitulo.ok) {
-      throw new AppError(validacaoTitulo.msg);
-    }
-
-    const validacaoAno = isAnoValido(dados.ano_publicacao);
-    if (!validacaoAno.ok) {
-      throw new AppError(validacaoAno.msg);
-    }
-
-    const validacaoQuantidade = isInteiroNaoNegativo(dados.quantidade_total)
-    if (!validacaoQuantidade.ok) {
-      throw new AppError(validacaoQuantidade.msg);
-    }
 
     const autor = await this.autorRepository.buscarPorId(dados.autor_id);
     if (!autor) {
@@ -50,24 +35,6 @@ export class LivroService {
   }
 
   async atualizar(id: number, dados: ILivro): Promise<ILivro> {
-    const validacaoTitulo = isTituloValido(dados.titulo);
-    if (!validacaoTitulo.ok) {
-      throw new AppError(validacaoTitulo.msg);
-    }
-
-    const validacaoAno = isAnoValido(dados.ano_publicacao);
-    if (!validacaoAno.ok) {
-      throw new AppError(validacaoAno.msg);
-    }
-
-    const validacaoQuantidade = isInteiroNaoNegativo(dados.quantidade_total)
-    if (!validacaoQuantidade.ok) {
-      throw new AppError(validacaoQuantidade.msg);
-    }
-
-    if (dados.quantidade_disponivel < 0) {
-      throw new AppError('Não é possível reduzir a quantidade disponível abaixo de 0.');
-    }
 
 
     if (dados.quantidade_total < dados.quantidade_disponivel) {
