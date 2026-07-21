@@ -4,6 +4,7 @@ import { tratarErro } from "../utils/tratarErro";
 import { IAutor } from "../models/Autor";
 import { listarAutor, listarTodosAutores } from "../utils/formatters";
 import { AppError } from "../utils/AppError";
+import { isTextoValido } from "../utils/validators";
 
 export class AutorController {
     private autorService = new AutorService();
@@ -26,7 +27,12 @@ export class AutorController {
     async cadastrar(): Promise<void> {
         try {
             const nome = await input({ message: "Nome do Autor(a): " });
+            const validacaoNome = isTextoValido(nome);
+            if (!validacaoNome.ok) throw new AppError(validacaoNome.msg);
+
             const nacionalidade = await input({ message: "Nacionalidade: " })
+            const validacaoNacionalidade = isTextoValido(nacionalidade);
+            if (!validacaoNacionalidade.ok) throw new AppError(validacaoNacionalidade.msg);
 
             const autor = await this.autorService.cadastrar({ nome, nacionalidade });
             if (autor) {
@@ -56,7 +62,12 @@ export class AutorController {
 
             // Pede inputs ao usuario definindo como padrão os atributos do autor existente
             const nome = await input({ message: 'Nome do Autor(a): ', default: autor.nome });
+            const validacaoNome = isTextoValido(nome);
+            if (!validacaoNome.ok) throw new AppError(validacaoNome.msg);
+
             const nacionalidade = await input({ message: 'Nacionalidade: ', default: autor.nacionalidade });
+            const validacaoNacionalidade = isTextoValido(nacionalidade);
+            if (!validacaoNacionalidade.ok) throw new AppError(validacaoNacionalidade.msg);
 
             // Atualiza o autor
             const autorAtualizado = await this.autorService.atualizar(id, {
@@ -65,7 +76,7 @@ export class AutorController {
                 nacionalidade
             });
 
-            if (!autorAtualizado) throw new AppError('Livro não foi atualizado.');
+            if (!autorAtualizado) throw new AppError('Autor não foi atualizado.');
             
             console.log(`\nAutor atualizado com sucesso!\n`);
             listarAutor(autorAtualizado);
