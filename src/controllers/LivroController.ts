@@ -3,6 +3,7 @@ import { LivroService } from '../services/LivroService';
 import { AppError } from '../utils/AppError';
 import { listarLivro, listarTodosLivros } from '../utils/formatters';
 import { tratarErro } from '../utils/tratarErro';
+import { isAnoValido, isInteiroNaoNegativo, isTituloValido } from '../utils/validators';
 import { input } from '@inquirer/i18n';
 
 export class LivroController {
@@ -26,8 +27,17 @@ export class LivroController {
   async cadastrar(): Promise<void> {
     try {
       const tituloLivro = await input({ message: 'Título do livro: ' });
+      const validacaoTitulo = isTituloValido(tituloLivro);
+      if (!validacaoTitulo.ok) throw new AppError(validacaoTitulo.msg);
+
       const ano_publicacao = Number(await input({ message: 'Ano de publicação: ' }));
+      const validacaoAno = isAnoValido(ano_publicacao);
+      if (!validacaoAno.ok) throw new AppError(validacaoAno.msg);
+
       const quantidade_total = Number(await input({ message: 'Quantidade total de exemplares: ' }));
+      const validacaoQuantidade = isInteiroNaoNegativo(quantidade_total);
+      if (!validacaoQuantidade.ok) throw new AppError(validacaoQuantidade.msg);
+
       const autor_id = Number(await input({ message: 'Id do autor: ' }));
 
       const livro: ILivro | undefined = await this.livroService.cadastrar({
@@ -68,9 +78,21 @@ export class LivroController {
 
       // Pede inputs ao usuario definindo como padrão os atributos do livro existente
       const tituloLivro = await input({ message: 'Título do livro: ', default: livro.titulo });
+      const validacaoTitulo = isTituloValido(tituloLivro);
+      if (!validacaoTitulo.ok) throw new AppError(validacaoTitulo.msg);
+
       const ano_publicacao = Number(await input({ message: 'Ano de publicação: ', default: String(livro.ano_publicacao) }));
+      const validacaoAno = isAnoValido(ano_publicacao);
+      if (!validacaoAno.ok) throw new AppError(validacaoAno.msg);
+
       const quantidade_disponivel = Number(await input({ message: 'Quantidade disponível de exemplares: ', default: String(livro.quantidade_disponivel) }));
+      const validacaoQuantidadeDisp = isInteiroNaoNegativo(quantidade_disponivel);
+      if (!validacaoQuantidadeDisp.ok) throw new AppError(validacaoQuantidadeDisp.msg);
+
       const quantidade_total = Number(await input({ message: 'Quantidade total de exemplares: ', default: String(livro.quantidade_total) }));
+      const validacaoQuantidade = isInteiroNaoNegativo(quantidade_total);
+      if (!validacaoQuantidade.ok) throw new AppError(validacaoQuantidade.msg);
+
       const autor_id = Number(await input({ message: 'Id do autor: ', default: String(livro.autor_id) }));
 
       // Atualiza o livro

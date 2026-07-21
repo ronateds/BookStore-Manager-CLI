@@ -4,6 +4,7 @@ import { tratarErro } from "../utils/tratarErro";
 import { IEmprestimo } from "../models/Emprestimo";
 import { listarEmprestimo, listarTodosEmprestimos } from "../utils/formatters";
 import { AppError } from "../utils/AppError";
+import { isInteiroPositivo } from "../utils/validators";
 
 export class EmprestimoController {
     private emprestimoService = new EmprestimoService();
@@ -26,7 +27,12 @@ export class EmprestimoController {
     async cadastrar(): Promise<void> {
         try {
             const cliente_id = Number(await input({ message: "ID do cliente: " }));
+            const validacaoClienteId = isInteiroPositivo(cliente_id);
+            if(!validacaoClienteId.ok) throw new AppError(validacaoClienteId.msg);
+
             const livro_id = Number(await input({ message: "ID do livro: " }));
+            const validacaoLivroId = isInteiroPositivo(livro_id);
+            if (!validacaoLivroId.ok) throw new AppError(validacaoLivroId.msg);
 
             const emprestimo = await this.emprestimoService.cadastrar({ cliente_id, livro_id });
             if (emprestimo) {
@@ -59,9 +65,15 @@ export class EmprestimoController {
 
             // Pede inputs ao usuario definindo como padrão os atributos do emprestimo existente
             const cliente_id = Number(await input({ message: "ID do cliente: ", default: String(emprestimo.cliente_id) }));
+            const validacaoClienteId = isInteiroPositivo(cliente_id);
+            if (!validacaoClienteId.ok) throw new AppError(validacaoClienteId.msg);
+
             const livro_id = Number(await input({ message: "ID do livro: ", default: String(emprestimo.livro_id) }));
+            const validacaoLivroId = isInteiroPositivo(livro_id);
+            if (!validacaoLivroId.ok) throw new AppError(validacaoLivroId.msg);
+
             const data_emprestimo = new Date(await input({ message: "Data de empréstimo: ", default: String(emprestimo.data_emprestimo) }));
-            const data_devolucao = new Date(await input({ message: "Data de empréstimo: ", default: String(emprestimo.data_devolucao) }));
+            const data_devolucao = new Date(await input({ message: "Data de devolução: ", default: String(emprestimo.data_devolucao) }));
 
 
             // Atualiza o emprestimo
@@ -73,7 +85,7 @@ export class EmprestimoController {
                 data_devolucao
             });
 
-            if (!emprestimoAtualizado) throw new AppError('Livro não foi atualizado.');
+            if (!emprestimoAtualizado) throw new AppError('Emprestimo não foi atualizado.');
 
             console.log(`\nEmprestimo atualizado com sucesso!\n`);
             listarEmprestimo(emprestimoAtualizado);
