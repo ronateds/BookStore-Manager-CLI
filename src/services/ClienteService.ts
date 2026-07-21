@@ -1,7 +1,6 @@
 import { Cliente, ICliente } from "../models/Cliente";
 import { ClienteRepository } from "../repositories/ClienteRepository";
 import { AppError } from "../utils/AppError";
-import { isEmailValido, isTextoValido } from "../utils/validators";
 
 export class ClienteService {
     private clienteRepository = new ClienteRepository();
@@ -11,16 +10,6 @@ export class ClienteService {
     }
 
     async cadastrar(dados: Omit<ICliente, "id">): Promise<Cliente | undefined> {
-        const validacaoNome = isTextoValido(dados.nome);
-        if(!validacaoNome.ok) {
-            throw new AppError(validacaoNome.msg);
-        }
-
-        const validacaoEmail= isEmailValido(dados.email);
-        if (!validacaoEmail.ok) {
-            throw new AppError(validacaoEmail.msg);
-        }
-
         return this.clienteRepository.cadastrar(dados);
     }
 
@@ -33,16 +22,6 @@ export class ClienteService {
     }
 
     async atualizar(id: number, dados: ICliente): Promise<Cliente> {
-        const validacaoNome = isTextoValido(dados.nome);
-        if (!validacaoNome.ok) {
-            throw new AppError(validacaoNome.msg);
-        }
-
-        const validacaoEmail = isEmailValido(dados.nome);
-        if (!validacaoEmail.ok) {
-            throw new AppError(validacaoNome.msg);
-        }
-
         const atualizado = await this.clienteRepository.atualizar(id, dados);
         if (!atualizado) {
             throw new AppError('Não foi possível atualizar o cliente.');
